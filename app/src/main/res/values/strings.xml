@@ -1,3 +1,5 @@
+
+<!-- Lab 5: Task 1, app name -->
 <resources>
-    <string name="app_name">CampusApp</string>
+    <string name="app_name">Boardgame Planner</string>
 </resources>
