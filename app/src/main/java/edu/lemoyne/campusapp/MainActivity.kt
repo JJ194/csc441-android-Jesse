@@ -3,6 +3,7 @@ package edu.lemoyne.campusapp
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Surface
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,11 +15,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -117,9 +124,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.outline
         )
+        CounterDemo()
     }
-
-
 
 }
 //---Lab 6: Task 4: Dark mode ----
@@ -137,5 +143,14 @@ fun HomeScreenDarkPreview(){
 fun HomeScreenPreview() {
     CampusAppTheme {
         HomeScreen()
+    }
+}
+
+//Mondays bug
+@Composable
+fun CounterDemo () {
+    var count by rememberSaveable{ mutableStateOf(0) }
+    Button(onClick = { count++ }) {
+        Text("Tapped $count times")
     }
 }
