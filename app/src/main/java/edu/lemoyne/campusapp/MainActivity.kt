@@ -17,11 +17,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -56,6 +58,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     // ---- Class 6: Step 3: A column, so things stack ---
+
+    // --- Class 7: Step 2: The list lives in a state ---
+    val BoardGames = remember {
+        mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova","Terra Mystica")
+    }
+    // --- Class 7: Step 3: What's typed lives in the state ---//
+    var newGame by remember {mutableStateOf("")}
     Column(
         modifier = modifier
         .fillMaxWidth()
@@ -81,6 +90,25 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         //--- Lab 6: Task 1: Customizing my screen more ----//
         Spacer(modifier = Modifier.height(8.dp))
+        // ---Class 7: Step 3a: The text field ---
+//        OutlinedTextField(
+//            value = newGame,
+//            onValueChange = { newGame = it},
+//            label = { Text("Boardgame name")},
+//            modifier = Modifier.height (8.dp)
+//        )
+
+        //Spacer(modifier = Modifier.height(8.dp))
+        // ---Class 7: Step 4: The button changes the state ---//
+        Button(onClick = {
+            BoardGames.add(newGame)
+            newGame = ""
+        }) {
+            Text ("Add Boardgame")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         Text(
             text = "---Board games I want to play---",
             fontSize = 16.sp,
@@ -88,6 +116,16 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         )
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        //step 3 class 6
+        OutlinedTextField(
+            value = newGame,
+            onValueChange = { newGame = it},
+            label = {Text("Game Name")},
+            modifier =Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         //-- Lab 6 Task 1: Sub header added, modified list.---
         Text(
@@ -97,10 +135,20 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         )
 
-        Text(text = "Orleans", fontSize = 16.sp)
-        Text(text = "Kingsburgh", fontSize = 16.sp)
-        Text(text = "Ark Nova", fontSize = 16.sp)
-        Text(text = "Terra Mystica",fontSize = 16.sp)
+
+//        Text(text = "Orleans", fontSize = 16.sp)
+//        Text(text = "Kingsburgh", fontSize = 16.sp)
+//        Text(text = "Ark Nova", fontSize = 16.sp)
+//        Text(text = "Terra Mystica",fontSize = 16.sp)
+
+        //--- Class 7: Step 2a: Draw the list
+        Text(
+            text = "${BoardGames.size} Boardgames",
+            fontWeight = FontWeight.Bold
+        )
+        for (BoardGames in BoardGames) {
+            Text(text = BoardGames, fontSize = 18.sp)
+        }
 
         //--- Lab 6 Task1: New header and list added.---
         Spacer(modifier = Modifier.height(20.dp))
@@ -124,7 +172,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.outline
         )
-        CounterDemo()
+        //CounterDemo()
     }
 
 }
@@ -146,11 +194,12 @@ fun HomeScreenPreview() {
     }
 }
 
-//Mondays bug
-@Composable
-fun CounterDemo () {
-    var count by rememberSaveable{ mutableStateOf(0) }
-    Button(onClick = { count++ }) {
-        Text("Tapped $count times")
-    }
-}
+//Mondays bug and
+//// --- Class 7: Step 1: A counter that remembers ---//
+//@Composable
+//fun CounterDemo () {
+//    var count by rememberSaveable{ mutableStateOf(0) }
+//    Button(onClick = { count++ }) {
+//        Text("Tapped $count times")
+//    }
+//}
