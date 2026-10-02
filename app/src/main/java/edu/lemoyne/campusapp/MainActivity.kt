@@ -63,6 +63,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     val BoardGames = remember {
         mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova","Terra Mystica")
     }
+    //-- Class : Step 2: The error message lives in the state too --/
+    var error by remember {mutableStateOf<String?>(value = null)}
     //-- Class 7: Step 3: What's typed lives in the state --//
     var newGame by remember {mutableStateOf("")}
     Column(
@@ -93,19 +95,30 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         //-- Class 7: Step 4: The button changes the state --//
         Button(onClick = {
-            BoardGames.add(newGame)
+            // --Clas 8: Step 3: Check before you add --//
+            var problem = validateNewGameName(input = newGame, existingNewGameName = BoardGames)
+            if (problem == null){
+                BoardGames.add(newGame)
+                newGame = ""
+            } else {
+                error = null
+            }
             newGame = ""
-        }) {
+        },
+            //-- Class 8: Step 4: The sign on the door, not the lock --//
+            enabled = newGame.isNotEmpty()
+            ) {
             Text ("Add Boardgame")
         }
 
         //-- Lab 7: Task 1: Remove the last item --//
         Button(onClick = {
+
             if (BoardGames.isNotEmpty()) {
                 BoardGames.removeAt(BoardGames.lastIndex)
                 }
         }) {
-            Text("Remove last game")
+            Text("Remove last game from list")
         }
 
         //-- Lab 7: Task 3: Clear all --//
@@ -117,7 +130,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         //-- Lab 7: Task 4: A live char counter --//
         Text(
-            text = "${newGame.length} / 40",
+            text = "${newGame.length} / 30",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -136,10 +149,23 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         //-- Class 7: Step 3a: The fields of text --//
         OutlinedTextField(
             value = newGame,
-            onValueChange = { newGame = it},
+            //-- Class 8: Step 3: The field itself pushed back --//
+
+            onValueChange = { newGame = it.take( n = MAX_NAME_LENGTH )
+                            error = null},
             label = {Text("Game Name")},
+            singleLine = true,
+            isError = error != null,
             modifier =Modifier.fillMaxWidth()
         )
+
+        error?.let{ message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 12.sp
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -188,6 +214,23 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     }
 
 }
+
+const val MAX_NAME_LENGTH = 30
+
+// -- Class 8: Step 1: One rule book for input names --//
+fun validateNewGameName(input : String, existingNewGameName: List<String>):
+String? {
+    val name = input.trim()
+    return when {
+        name.isEmpty() -> "Enter a board game"
+        name.length > MAX_NAME_LENGTH -> "Enter $MAX_NAME_LENGTH or less"
+        existingNewGameName.any { it.equals( other = name, ignoreCase = true)}
+                -> "$name is already on the list"
+        else -> null
+    }
+    //validateBoardGameName Step 1
+}
+
 // -- Lab 6: Task 4: Dark mode --//
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
