@@ -2,15 +2,12 @@ package edu.lemoyne.campusapp
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Surface
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,7 +49,21 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+const val MAX_NAME_LENGTH = 30
+//-- Class 8: Step 2: One rulebook for boardgame names --//
+fun validateNewGameName(input: String, existing: List<String>): String? {
+    val name = input.trim()
+    return when {
+        //-- Lab 8: Task 1: Min length --//
+        name.isEmpty() -> "Enter a board game"
+        name.length < 3 -> "Too short, 3 characters minimum"
+        name.length > MAX_NAME_LENGTH -> "Enter $MAX_NAME_LENGTH or less"
+        //-- Lab 8: Task 2: My own rule --//
+        name.contains ("  ") -> "No double spaces"
+        existing.any { it.equals(name, ignoreCase = true) } -> "\"$name\" is already on the list"
+        else -> null
+    }
+}
 
 //-- Class 6: Step 1:  My own screen --//
 @Composable
@@ -63,6 +74,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     val BoardGames = remember {
         mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova","Terra Mystica")
     }
+    //-- Class : Step 2: The error message lives in the state too --/
+    var error by remember {mutableStateOf<String?>(value = null)}
     //-- Class 7: Step 3: What's typed lives in the state --//
     var newGame by remember {mutableStateOf("")}
     Column(
@@ -91,21 +104,62 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         //-- Lab 6: Task 1: Customizing my screen more --//
         Spacer(modifier = Modifier.height(8.dp))
 
+        //-- Class 7: Step 3a: The fields of text --//
+        OutlinedTextField(
+            value = newGame,
+            //-- Class 8: Step 4: The field itself pushes back
+            onValueChange = {
+                newGame = it.take(MAX_NAME_LENGTH)
+                error = null
+            },
+            label = { Text("Game Name") },
+            singleLine = true,
+            isError = error != null,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // --- Class 8 · Step 3: show the problem ---
+        error?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 14.sp
+            )
+        }
+
+        //-- Lab 7: Task 4: A live character counter --//
+        Text(
+            text = "${newGame.length} / $MAX_NAME_LENGTH",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
         //-- Class 7: Step 4: The button changes the state --//
-        Button(onClick = {
-            BoardGames.add(newGame)
-            newGame = ""
-        }) {
+        Button(
+            onClick = {
+            // --Class 8: Step 3a: Check before you add --//
+            val problem = validateNewGameName(input = newGame, existing = BoardGames)
+            if (problem == null){
+                BoardGames.add(newGame.trim())
+                newGame = ""
+            } else {
+                error = problem
+            }
+        },
+            //-- Class 8: Step 5: The sign on the door, not the lock --//
+            enabled = newGame.isNotEmpty()
+            ) {
             Text ("Add Boardgame")
         }
 
         //-- Lab 7: Task 1: Remove the last item --//
         Button(onClick = {
+
             if (BoardGames.isNotEmpty()) {
                 BoardGames.removeAt(BoardGames.lastIndex)
                 }
         }) {
-            Text("Remove last game")
+            Text("Remove last game from list")
         }
 
         //-- Lab 7: Task 3: Clear all --//
@@ -114,14 +168,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         }) {
             Text ("Clear All")
         }
-
-        //-- Lab 7: Task 4: A live char counter --//
-        Text(
-            text = "${newGame.length} / 40",
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -132,16 +178,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-
-        //-- Class 7: Step 3a: The fields of text --//
-        OutlinedTextField(
-            value = newGame,
-            onValueChange = { newGame = it},
-            label = {Text("Game Name")},
-            modifier =Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         //-- Lab 6 Step 1: Sub header added, modified list --//
         Text(
@@ -188,6 +224,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     }
 
 }
+
 // -- Lab 6: Task 4: Dark mode --//
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -208,10 +245,10 @@ fun HomeScreenPreview() {
 
 //Mondays bug and
 //-- Class 7: Step 1: A counter that remembers --//
-@Composable
-fun CounterDemo () {
-   var count by rememberSaveable{ mutableStateOf(0) }
-   Button(onClick = { count++ }) {
-       Text("Tapped $count times")
-   }
-}
+//@Composable
+//fun CounterDemo () {
+//   var count by rememberSavable{ mutableStateOf(0) }
+//   Button(onClick = { count++ }) {
+//       Text("Tapped $count times")
+//   }
+//}
