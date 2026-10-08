@@ -59,11 +59,18 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
             boardGames = boardGames,
             onAddGame = { boardGames.add(it) },
             onSeeAll = { currentScreen = "list" },
+            //-- Lab 9 Task 2: Passing on about --//
+            onAbout = { currentScreen = "about"},
             modifier = modifier
         )
         "list" -> ListScreen(
             boardGames = boardGames,
             onBack = { currentScreen = "home" },
+            modifier = modifier
+        )
+        //-- Lab 9: Task 2: A way to the about screen --//
+        "about" -> AboutScreen(
+            onBack = {currentScreen = "home"},
             modifier = modifier
         )
     }
@@ -75,6 +82,8 @@ fun HomeScreen(
     boardGames: List<String>,
     onAddGame: (String) -> Unit,
     onSeeAll: () -> Unit,
+    //-- Lab 9: Task 2: adding on about --//
+    onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     //-- Class 7: Step 3: What's typed lives in the state
@@ -171,6 +180,13 @@ fun HomeScreen(
         Button(onClick = onSeeAll) {
             Text("See all games")
         }
+        Spacer(modifier = Modifier.height(8.dp))
+
+        //-- Lab 9: Task 2: The about button --//
+        TextButton(onClick = onAbout) {
+            Text("About")
+        }
+
     }
 }
 
@@ -201,6 +217,13 @@ fun ListScreen(
             fontWeight = FontWeight.Bold
         )
 
+        //-- Lab 9: Task 1: Count the list on the screen --//
+        Text(
+            text = if (boardGames.size == 1) "1 game on the list" else "${boardGames.size} games on list",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         for (game in boardGames) {
@@ -212,7 +235,38 @@ fun ListScreen(
         }
     }
 }
+//-- Lab 9: Task 2: A third screen --//
+@Composable
+fun AboutScreen(
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    BackHandler { onBack()}
 
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        TextButton(onClick = onBack) {
+            Text("Back")
+        }
+
+        Text(
+            text = "About",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = "A board game planner to track games I've played, and ones I want to play.")
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(text = "Built for CSC 441 by Jesse Jordan")
+    }
+}
 //-- Class 9: Step 2: The previews need sample data now too --//
 @Preview(showBackground = true)
 @Composable
@@ -221,7 +275,9 @@ fun HomeScreenPreview() {
         HomeScreen(
             boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova"),
             onAddGame = {},
-            onSeeAll = {}
+            onSeeAll = {},
+            //-- Lab 9: Task 2: Preview placeholder with empty braces --//
+            onAbout = {}
         )
     }
 }
