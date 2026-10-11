@@ -59,12 +59,11 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
         mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica" , "Pirates of Maracaibo" )
     }
     //-- Class 10: Step 1: 60 boardgames --//
-//val boardGames = remember {
-//    (1..60).map { "Test game $it"}.toMutableStateList()
-//}
+  //val boardGames = remember {
+  //    (1..60).map { "Test game $it"}.toMutableStateList()
+  //}
 
     //-- Class 9: Step 4: Which screen is showing a state --//
-
     var currentScreen by rememberSaveable { mutableStateOf("home") }
 
     when (currentScreen) {
