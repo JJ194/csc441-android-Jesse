@@ -80,6 +80,7 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
             //-- Class 10: Step 4: Only the owner can change the list --//
             onRemove = { boardGames.remove(it)},
             onBack = { currentScreen = "home" },
+            onRemoveAll = { boardGames.clear()},
             modifier = modifier
         )
         //-- Lab 9: Task 2: A way to the about screen --//
@@ -210,6 +211,7 @@ fun ListScreen(
     boardGames: List<String>,
     onBack: () -> Unit,
     onRemove: (String) -> Unit,
+    onRemoveAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     //-- Class 9: Step 6: The phone's back button goes home too --//
@@ -226,6 +228,12 @@ fun ListScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        //--Lab 10: Task 2: Remove all through the owner --//
+        if (boardGames.isNotEmpty()){
+            TextButton(onClick = onRemoveAll) {
+                Text("Remove all")
+            }
+        }
         Text(
             text = "All Board Games",
             fontSize = 28.sp,
@@ -247,6 +255,12 @@ fun ListScreen(
                 text = "No games yet. Add one on the home screen please.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            //-- Lab 10: Task 1: A way out of the empty screen --//
+            TextButton(onClick = onBack) {
+                Text("Back to the home screen")
+            }
         }
         //-- Class 10: Step 2: A list that scrolls --//
         LazyColumn(
@@ -343,7 +357,8 @@ fun ListScreenPreview() {
         ListScreen(
             boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica"),
             onBack = {},
-            onRemove = {}
+            onRemove = {},
+            onRemoveAll = {}
         )
     }
 }
@@ -356,7 +371,8 @@ fun ListScreenEmptyPreview() {
         ListScreen(
             boardGames = emptyList(),
             onBack = {},
-            onRemove = {}
+            onRemove = {},
+            onRemoveAll = {}
 
         )
     }
