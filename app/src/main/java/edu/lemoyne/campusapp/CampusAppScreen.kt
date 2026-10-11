@@ -1,5 +1,6 @@
 package edu.lemoyne.campusapp
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -11,9 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,7 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -32,10 +36,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.ui.Alignment
-import kotlin.collections.emptyList
 
 const val MAX_NAME_LENGTH = 30
 
@@ -62,6 +62,7 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
 //val boardGames = remember {
 //    (1..60).map { "Test game $it"}.toMutableStateList()
 //}
+
     //-- Class 9: Step 4: Which screen is showing a state --//
 
     var currentScreen by rememberSaveable { mutableStateOf("home") }
@@ -202,6 +203,29 @@ fun HomeScreen(
             Text("About")
         }
 
+        //--- Lab 6 Task1: New header and list added.---
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Expansions I want to play:",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W900
+        )
+
+        Text(text = "MagLev map pack 2", fontSize = 14.sp)
+        Text(text = "Forest Shuffle: Alpine", fontSize = 14.sp)
+        Text(text = "Slay the Spire: Downfall", fontSize = 14.sp)
+        Text(text = "Everdell: Newleaf", fontSize = 14.sp)
+
+        //---Lab 6: Task 2: A footer--//
+        Spacer(modifier = Modifier.height(36.dp))
+
+        Text(
+            text = "Last updated October 2026",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.outline
+        )
+
     }
 }
 
@@ -340,7 +364,7 @@ fun AboutScreen(
 fun HomeScreenPreview() {
     CampusAppTheme {
         HomeScreen(
-            boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova"),
+            boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica", "Pirates of Maracaibo"),
             onAddGame = {},
             onSeeAll = {},
             //-- Lab 9: Task 2: Preview placeholder with empty braces --//
@@ -355,7 +379,7 @@ fun HomeScreenPreview() {
 fun ListScreenPreview() {
     CampusAppTheme {
         ListScreen(
-            boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica"),
+            boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica", "Pirates of Maracaibo"),
             onBack = {},
             onRemove = {},
             onRemoveAll = {}
@@ -375,5 +399,30 @@ fun ListScreenEmptyPreview() {
             onRemoveAll = {}
 
         )
+    }
+}
+
+//-- Checkpoint 1 Instructions: About preview --//
+@Preview(showBackground = true)
+@Composable
+fun AboutScreenPreview(){
+    CampusAppTheme() {
+        AboutScreen(onBack = {})
+    }
+}
+
+//---Lab 6: Task 4: Dark mode ----
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun HomeScreenDarkPreview(){
+    CampusAppTheme() {
+        Surface {
+            HomeScreen(
+                boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica", "Pirates of Maracaibo" ),
+                onAddGame = {},
+                onSeeAll = {},
+                onAbout = {}
+            )
+        }
     }
 }
