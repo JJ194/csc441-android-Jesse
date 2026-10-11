@@ -2,11 +2,15 @@ package edu.lemoyne.campusapp
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -19,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -27,6 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.ui.Alignment
+import kotlin.collections.emptyList
 
 const val MAX_NAME_LENGTH = 30
 
@@ -47,9 +56,12 @@ fun validateNewGameName(input: String, existing: List<String>): String? {
 @Composable
 fun CampusAppScreen(modifier: Modifier = Modifier) {
     val boardGames = remember {
-        mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica")
+        mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica" , "Pirates of Maracaibo" )
     }
-
+    //-- Class 10: Step 1: 60 boardgames --//
+//val boardGames = remember {
+//    (1..60).map { "Test game $it"}.toMutableStateList()
+//}
     //-- Class 9: Step 4: Which screen is showing a state --//
 
     var currentScreen by rememberSaveable { mutableStateOf("home") }
@@ -65,7 +77,10 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
         )
         "list" -> ListScreen(
             boardGames = boardGames,
+            //-- Class 10: Step 4: Only the owner can change the list --//
+            onRemove = { boardGames.remove(it)},
             onBack = { currentScreen = "home" },
+            onRemoveAll = { boardGames.clear()},
             modifier = modifier
         )
         //-- Lab 9: Task 2: A way to the about screen --//
@@ -195,6 +210,8 @@ fun HomeScreen(
 fun ListScreen(
     boardGames: List<String>,
     onBack: () -> Unit,
+    onRemove: (String) -> Unit,
+    onRemoveAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     //-- Class 9: Step 6: The phone's back button goes home too --//
@@ -202,7 +219,7 @@ fun ListScreen(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(24.dp)
     ) {
         TextButton(onClick = onBack) {
@@ -211,6 +228,12 @@ fun ListScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        //--Lab 10: Task 2: Remove all through the owner --//
+        if (boardGames.isNotEmpty()){
+            TextButton(onClick = onRemoveAll) {
+                Text("Remove all")
+            }
+        }
         Text(
             text = "All Board Games",
             fontSize = 28.sp,
@@ -226,15 +249,59 @@ fun ListScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        for (game in boardGames) {
+        //-- Class 10: Step 5a: The empty case --//
+        if (boardGames.isEmpty()){
             Text(
-                text = game,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(vertical = 6.dp)
-            )
+                text = "No games yet. Add one on the home screen please.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            //-- Lab 10: Task 1: A way out of the empty screen --//
+            TextButton(onClick = onBack) {
+                Text("Back to the home screen")
+            }
+        }
+        //-- Class 10: Step 2: A list that scrolls --//
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ){
+            items(boardGames) { game ->
+                GameRow(
+                    name = game,
+                    onRemove = { onRemove(game)}
+                )
+
+            }
         }
     }
 }
+
+//-- Class 10: Step 3: One row, as its own composable --//
+@Composable
+fun GameRow(
+    name: String,
+    onRemove: () -> Unit
+) {
+    Card(modifier = Modifier.fillMaxWidth()){
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = name,
+                fontSize = 18.sp,
+                modifier = Modifier.weight(1f)
+            )
+            //--Class 10: Step 4: A button to remove on every row --//
+            TextButton(onClick = onRemove) {
+                Text ("Remove")
+            }
+        }
+    }
+}
+
+//}
 //-- Lab 9: Task 2: A third screen --//
 @Composable
 fun AboutScreen(
@@ -289,7 +356,24 @@ fun ListScreenPreview() {
     CampusAppTheme {
         ListScreen(
             boardGames = listOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica"),
-            onBack = {}
+            onBack = {},
+            onRemove = {},
+            onRemoveAll = {}
+        )
+    }
+}
+
+//-- Class 10: Step 5: Preview the empty case --//
+@Preview(showBackground = true)
+@Composable
+fun ListScreenEmptyPreview() {
+    CampusAppTheme() {
+        ListScreen(
+            boardGames = emptyList(),
+            onBack = {},
+            onRemove = {},
+            onRemoveAll = {}
+
         )
     }
 }
