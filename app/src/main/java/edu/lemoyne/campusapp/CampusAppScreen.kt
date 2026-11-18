@@ -228,7 +228,7 @@ fun HomeScreen(
     }
 }
 
-// --- Class 9 · Step 3: Second screen ---
+// --- Class 9 · Step 3: Second screen ---//
 @Composable
 fun ListScreen(
     boardGames: List<String>,
@@ -252,7 +252,7 @@ fun ListScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         //--Lab 10: Task 2: Remove all through the owner --//
-        if (boardGames.isNotEmpty()){
+        if (boardGames.isNotEmpty()) {
             TextButton(onClick = onRemoveAll) {
                 Text("Remove all")
             }
@@ -273,28 +273,29 @@ fun ListScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         //-- Class 10: Step 5a: The empty case --//
-        if (boardGames.isEmpty()){
+        if (boardGames.isEmpty()) {
             Text(
                 text = "No games yet. Add one on the home screen please.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            )
             Spacer(modifier = Modifier.height(8.dp))
 
             //-- Lab 10: Task 1: A way out of the empty screen --//
             TextButton(onClick = onBack) {
                 Text("Back to the home screen")
             }
-        }
-        //-- Class 10: Step 2: A list that scrolls --//
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ){
-            items(boardGames) { game ->
-                GameRow(
-                    name = game,
-                    onRemove = { onRemove(game)}
-                )
+        } else {
+            //-- Class 10: Step 2: A list that scrolls --//
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(boardGames) { game ->
+                    GameRow(
+                        name = game,
+                        onRemove = { onRemove(game) }
+                    )
 
+                }
             }
         }
     }
