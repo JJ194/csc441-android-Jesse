@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,14 +33,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
 
 class MainActivity : ComponentActivity() {
+    private val showcaseViewModel: ShowcaseViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        showcaseViewModel.refresh()
         enableEdgeToEdge()
         setContent {
             CampusAppTheme {
+                val showcaseState by showcaseViewModel.uiState.collectAsStateWithLifecycle()
+                //showcaseViewModel
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     //-- Class 9: Step 2: The app starts at the owner --//
                     CampusAppScreen(modifier = Modifier.padding(innerPadding))

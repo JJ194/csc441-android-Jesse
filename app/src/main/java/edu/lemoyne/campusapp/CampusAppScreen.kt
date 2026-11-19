@@ -66,6 +66,10 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
     //-- Class 9: Step 4: Which screen is showing a state --//
     var currentScreen by rememberSaveable { mutableStateOf("home") }
 
+    var interestsState by remember {
+        mutableStateOf<ShowcaseUiState>(ShowcaseUiState.Loading)
+    }
+
     when (currentScreen) {
         "home" -> HomeScreen(
             boardGames = boardGames,
@@ -73,6 +77,7 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
             onSeeAll = { currentScreen = "list" },
             //-- Lab 9 Task 2: Passing on about --//
             onAbout = { currentScreen = "about"},
+            onInterestsClick = { currentScreen = "interests" },
             modifier = modifier
         )
         "list" -> ListScreen(
@@ -83,11 +88,18 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
             onRemoveAll = { boardGames.clear()},
             modifier = modifier
         )
+
+        "interests" -> InterestsScreen(
+            state = interestsState,
+            onBack = { currentScreen = "home" },
+            modifier = modifier
+        )
         //-- Lab 9: Task 2: A way to the about screen --//
         "about" -> AboutScreen(
             onBack = {currentScreen = "home"},
             modifier = modifier
         )
+
     }
 }
 
@@ -99,6 +111,8 @@ fun HomeScreen(
     onSeeAll: () -> Unit,
     //-- Lab 9: Task 2: adding on about --//
     onAbout: () -> Unit,
+    // Class 21: Step 5: Navigation to existing screen owner
+    onInterestsClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     //-- Class 7: Step 3: What's typed lives in the state
@@ -106,6 +120,8 @@ fun HomeScreen(
 
     //-- Class 8: Step 3: The error message lives in the state too-- //
     var error by remember { mutableStateOf<String?>(null) }
+
+
 
     Column(
         modifier = modifier
@@ -181,6 +197,8 @@ fun HomeScreen(
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        Button(onClick = onInterestsClick) { Text("My Interests") }
 
         //-- Class 7: Step 2: Draw the list --//
         Text(

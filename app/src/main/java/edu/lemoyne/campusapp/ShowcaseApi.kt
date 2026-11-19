@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 interface ShowcaseApi {
-    @GET( value = "/rest/vishowcase_items")
+    @GET( value = "/rest/v1/showcase_items")
     suspend fun getShowcaseItems(
         @Header ( value = "apikey") apiKey: String
 
