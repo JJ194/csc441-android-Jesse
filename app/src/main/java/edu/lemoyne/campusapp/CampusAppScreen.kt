@@ -54,7 +54,7 @@ fun validateNewGameName(input: String, existing: List<String>): String? {
 
 // --- Class 9: Step 2: One owner for the all the data ---
 @Composable
-fun CampusAppScreen(modifier: Modifier = Modifier) {
+fun CampusAppScreen( interestsState: ShowcaseUiState, modifier: Modifier = Modifier) {
     val boardGames = remember {
         mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica" , "Pirates of Maracaibo" )
     }
@@ -66,9 +66,7 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
     //-- Class 9: Step 4: Which screen is showing a state --//
     var currentScreen by rememberSaveable { mutableStateOf("home") }
 
-    var interestsState by remember {
-        mutableStateOf<ShowcaseUiState>(ShowcaseUiState.Loading)
-    }
+
 
     when (currentScreen) {
         "home" -> HomeScreen(
@@ -88,7 +86,7 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
             onRemoveAll = { boardGames.clear()},
             modifier = modifier
         )
-
+//    Class 21: Step 5: Navigation to the existing screen owner
         "interests" -> InterestsScreen(
             state = interestsState,
             onBack = { currentScreen = "home" },

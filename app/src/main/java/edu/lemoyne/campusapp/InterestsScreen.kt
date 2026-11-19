@@ -14,17 +14,27 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.LaunchedEffect
 @Composable
 
-
+//Lab 21: Task 1: Update interestsScreen
 fun InterestsScreen(
     state: ShowcaseUiState,
     onBack: () -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    //Lab 21: Task 1a: Load when the screen opens
+    LaunchedEffect(Unit) {
+        onRefresh
+    }
     BackHandler { onBack() }
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         TextButton(onClick = onBack) { Text("Back") }
+        //Lab 21: Task 1b: Reload when tapped
+        TextButton(onClick = onRefresh) {
+            Text("Refresh items")
+        }
         when (state) {
 
             ShowcaseUiState.Loading -> Text("Loading from Supabase...")

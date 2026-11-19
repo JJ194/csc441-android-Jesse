@@ -24,10 +24,8 @@ class ShowcaseViewModel: ViewModel() {
             try {
                 val items = repository.loadItems()
                 _uiState.value = ShowcaseUiState.Success(items)
-
             } catch (error: Exception) {
                 _uiState.value = ShowcaseUiState.Error(error.message ?: "Network error")
-
             }
         }
     }

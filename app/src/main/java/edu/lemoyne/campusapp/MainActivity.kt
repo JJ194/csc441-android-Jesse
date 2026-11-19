@@ -43,12 +43,12 @@ class MainActivity : ComponentActivity() {
         showcaseViewModel.refresh()
         enableEdgeToEdge()
         setContent {
+//            Class 21: Step 6: Passing state in the main
             CampusAppTheme {
                 val showcaseState by showcaseViewModel.uiState.collectAsStateWithLifecycle()
-                //showcaseViewModel
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     //-- Class 9: Step 2: The app starts at the owner --//
-                    CampusAppScreen(modifier = Modifier.padding(innerPadding))
+                    CampusAppScreen(interestsState = showcaseState, modifier = Modifier.padding(innerPadding))
 
                 }
             }
