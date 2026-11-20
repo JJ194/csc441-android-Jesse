@@ -93,6 +93,7 @@ fun CampusAppScreen( interestsState: ShowcaseUiState, onRefresh: () -> Unit = {}
             onRefresh = onRefresh,
             modifier = modifier
         )
+
         //-- Lab 9: Task 2: A way to the about screen --//
         "about" -> AboutScreen(
             onBack = {currentScreen = "home"},
