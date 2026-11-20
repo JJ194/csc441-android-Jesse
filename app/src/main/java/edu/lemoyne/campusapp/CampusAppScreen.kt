@@ -54,7 +54,7 @@ fun validateNewGameName(input: String, existing: List<String>): String? {
 
 // --- Class 9: Step 2: One owner for the all the data ---
 @Composable
-fun CampusAppScreen( interestsState: ShowcaseUiState, modifier: Modifier = Modifier) {
+fun CampusAppScreen( interestsState: ShowcaseUiState, onRefresh: () -> Unit = {}, modifier: Modifier = Modifier) {
     val boardGames = remember {
         mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica" , "Pirates of Maracaibo" )
     }
@@ -90,6 +90,7 @@ fun CampusAppScreen( interestsState: ShowcaseUiState, modifier: Modifier = Modif
         "interests" -> InterestsScreen(
             state = interestsState,
             onBack = { currentScreen = "home" },
+            onRefresh = onRefresh,
             modifier = modifier
         )
         //-- Lab 9: Task 2: A way to the about screen --//

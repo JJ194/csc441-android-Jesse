@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 val showcaseState by showcaseViewModel.uiState.collectAsStateWithLifecycle()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     //-- Class 9: Step 2: The app starts at the owner --//
-                    CampusAppScreen(interestsState = showcaseState, modifier = Modifier.padding(innerPadding))
+                    CampusAppScreen(interestsState = showcaseState, onRefresh = { showcaseViewModel.refresh() }, modifier = Modifier.padding(innerPadding))
 
                 }
             }

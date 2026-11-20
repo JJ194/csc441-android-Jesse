@@ -26,7 +26,7 @@ fun InterestsScreen(
 ) {
     //Lab 21: Task 1a: Load when the screen opens
     LaunchedEffect(Unit) {
-        onRefresh
+        onRefresh()
     }
     BackHandler { onBack() }
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
@@ -36,20 +36,28 @@ fun InterestsScreen(
             Text("Refresh items")
         }
         when (state) {
-
+        // Lab 21: Task 3: Handle a succesfull empty resoponse
             ShowcaseUiState.Loading -> Text("Loading from Supabase...")
             is ShowcaseUiState.Error -> Column {
                 Text("Could not load: " + state.message)
             }
-            is ShowcaseUiState.Success -> LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(state.items) { item ->
-                    Column(Modifier.padding(8.dp)) {
-                        Text(item.title)
-                        Text(item.category)
-                        Text(item.description)
+
+            is ShowcaseUiState.Success -> {
+                if (state.items.isEmpty()) {
+                    Text("No items yet.")
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    )
+                    {
+                        items(state.items) { item ->
+                            Column(Modifier.padding(8.dp)) {
+                                Text(item.title)
+                                Text(item.category)
+                                Text(item.description)
+                            }
+                        }
                     }
                 }
             }

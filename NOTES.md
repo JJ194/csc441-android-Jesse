@@ -95,6 +95,16 @@ controls. Adding a sorting function by alphabet would be helpful, and adding a d
 
 \# successful clone and run before submitting
 
+Week 13, Wed, Lab 21
+1. The launched effect on refresh triggers a refresh the first time it is opened.
+2. Tapping on refresh sends the call to interestscreen, and showcase viewmodel updates and compose recomposes
+3. Interest screen requests the refresh, and the main activity gets it instead of interests screen having to know or ask about viewmodel or the database.
+4. A [] is a succesfull 200 status return, the database was reached, questioned and returned an empty result since what was asked wasn't found. A network failure is when the database was reached, but the return was lost or never recived by the requestor.
+5. Proof of the same database being used is changing the database, and refreshing both android and the web to get the new same result.
+
+AI: I had to use it a little more this week to track down some syntax and call backs errors in the code. I generally don't use it much
+but this week was busy and I wasn't able to work on the lab as much as I would of liked to. 
+
 
 
 
