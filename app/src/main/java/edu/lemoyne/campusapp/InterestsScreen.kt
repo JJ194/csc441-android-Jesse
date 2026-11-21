@@ -1,6 +1,4 @@
 package edu.lemoyne.campusapp
-// Class 21: Step 4: Compose screen
-
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -12,31 +10,29 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.LaunchedEffect
-@Composable
 
-//Lab 21: Task 1: Update interestsScreen
+@Composable
 fun InterestsScreen(
     state: ShowcaseUiState,
     onBack: () -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    //Lab 21: Task 1a: Load when the screen opens
-    LaunchedEffect(Unit) {
-        onRefresh()
-    }
+//    LaunchedEffect(Unit) {
+//        onRefresh()
+//    }
     BackHandler { onBack() }
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
         TextButton(onClick = onBack) { Text("Back") }
-        //Lab 21: Task 1b: Reload when tapped
         TextButton(onClick = onRefresh) {
             Text("Refresh items")
         }
         when (state) {
-        // Lab 21: Task 3: Handle a succesfull empty resoponse
             ShowcaseUiState.Loading -> Text("Loading from Supabase...")
             is ShowcaseUiState.Error -> Column {
                 Text("Could not load: " + state.message)
@@ -49,13 +45,12 @@ fun InterestsScreen(
                     LazyColumn(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
-                    )
-                    {
+                    ) {
                         items(state.items) { item ->
                             Column(Modifier.padding(8.dp)) {
-                                Text(item.title)
-                                Text(item.category)
-                                Text(item.description)
+                                item.title?.let { Text(it) }
+                                item.category?.let { Text(it) }
+                                item.description?.let { Text(it) }
                             }
                         }
                     }
