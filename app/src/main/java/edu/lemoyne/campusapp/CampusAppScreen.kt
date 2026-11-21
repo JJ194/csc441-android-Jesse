@@ -54,7 +54,8 @@ fun validateNewGameName(input: String, existing: List<String>): String? {
 
 // --- Class 9: Step 2: One owner for the all the data ---
 @Composable
-fun CampusAppScreen( interestsState: ShowcaseUiState, onRefresh: () -> Unit = {}, modifier: Modifier = Modifier) {
+fun CampusAppScreen( interestsState: ShowcaseUiState, loginState: LoginUiState, onRefresh: () -> Unit = {},
+                     onLogin: (String, String, () -> Unit ) -> Unit, modifier: Modifier = Modifier) {
     val boardGames = remember {
         mutableStateListOf("Orleans", "Kingsburgh", "Ark Nova", "Terra Mystica" , "Pirates of Maracaibo" )
     }
@@ -75,7 +76,7 @@ fun CampusAppScreen( interestsState: ShowcaseUiState, onRefresh: () -> Unit = {}
             onSeeAll = { currentScreen = "list" },
             //-- Lab 9 Task 2: Passing on about --//
             onAbout = { currentScreen = "about"},
-            onInterestsClick = { currentScreen = "interests" },
+            onInterestsClick = { currentScreen = "login"},
             modifier = modifier
         )
         "list" -> ListScreen(
@@ -86,6 +87,14 @@ fun CampusAppScreen( interestsState: ShowcaseUiState, onRefresh: () -> Unit = {}
             onRemoveAll = { boardGames.clear()},
             modifier = modifier
         )
+
+        "login" -> LoginScreen(
+            state = loginState,
+            onLogin = { email, password ->
+                onLogin(email, password)
+                { currentScreen = "interests"}            },
+            modifier = modifier
+        )
 //    Class 21: Step 5: Navigation to the existing screen owner
         "interests" -> InterestsScreen(
             state = interestsState,
@@ -93,6 +102,7 @@ fun CampusAppScreen( interestsState: ShowcaseUiState, onRefresh: () -> Unit = {}
             onRefresh = onRefresh,
             modifier = modifier
         )
+
         //-- Lab 9: Task 2: A way to the about screen --//
         "about" -> AboutScreen(
             onBack = {currentScreen = "home"},
