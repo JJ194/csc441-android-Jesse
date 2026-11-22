@@ -106,6 +106,13 @@ AI: I had to use it a little more this week to track down some syntax and call b
 but this week was busy and I wasn't able to work on the lab as much as I would of liked to. 
 
 
+Week 13, Fri, Lab 22
+1. Re-tested network failure and added screenshots. I already merged and closed week 13 branch 
+Saturday morning but didn't realize there wasn't an assignment yet. So made the branch again and hopefully
+pushed, pr,and close correctly
+
+AI: Used again mainly to track down naming mismatches I somehow made, mostly in with showcaseui
+and onrefresh getting passed correctly after adding in the additional code posted to finish the lab.
 
 
 
